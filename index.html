@@ -1,0 +1,32 @@
+<html>
+  <head>
+    <style>
+      .anime-list {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Today's Anime Schedule</h1>
+    <div class="anime-list">
+    </div>
+  </body>
+  <script>
+    const animeListContainer = document.querySelector('.anime-list');
+
+    fetch('https://www.animatetimes.com/tag/details.php?id=6212')
+      .then(response => response.json())
+      .then(data => {
+        data.forEach(anime => {
+          const animeElement = document.createElement('div');
+          animeElement.innerHTML = `
+            <p>${anime.title}</p>
+            <p>${anime.time}</p>
+          `;
+          animeListContainer.appendChild(animeElement);
+        });
+      });
+  </script>
+</html>
