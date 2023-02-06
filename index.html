@@ -17,7 +17,7 @@
     </style>
   </head>
   <body>
-    <table id="schedule">
+    <table id="item">
       <tr>
         <th>放送日</th>
         <th>アニメ名</th>
@@ -27,7 +27,7 @@
 
     <script>
       const apiUrl = 'http://animemap.net/api/table/tokyo.json';
-      const table = document.getElementById('schedule');
+      const table = document.getElementById('item');
 
       fetch(apiUrl)
         .then(response => response.json())
