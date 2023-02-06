@@ -5,10 +5,31 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        margin-top: 20px;
       }
       .day-of-week {
         font-weight: bold;
+        margin-top: 40px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+      }
+      .anime-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         margin-top: 20px;
+        padding: 20px;
+        background-color: lightgray;
+        border-radius: 10px;
+      }
+      .anime-title {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+      .anime-start-date {
+        font-size: 14px;
+        color: gray;
       }
     </style>
   </head>
@@ -48,9 +69,10 @@
 
           animeForDay.forEach(anime => {
             const animeElement = document.createElement('div');
+            animeElement.classList.add('anime-item');
             animeElement.innerHTML = `
-              <p>${anime.title}</p>
-              <p>${anime.start}</p>
+              <p class="anime-title">${anime.title}</p>
+              <p class="anime-start-date">${anime.start}</p>
             `;
             animeListContainer.appendChild(animeElement);
           });
