@@ -6,26 +6,54 @@
         flex-direction: column;
         align-items: center;
       }
+      .day-of-week {
+        font-weight: bold;
+        margin-top: 20px;
+      }
     </style>
   </head>
   <body>
-    <h1>Today's Anime Schedule</h1>
+    <h1>Today's Anime Schedule in Tokyo</h1>
     <div class="anime-list">
     </div>
   </body>
   <script>
     const animeListContainer = document.querySelector('.anime-list');
 
-    fetch('http://api.moemoe.tokyo/anime/v1/master/2023/1')
+    fetch('http://animemap.net/api/table/tokyo.json')
       .then(response => response.json())
       .then(data => {
+        const today = new Date();
+        const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const animeByDay = {};
+
         data.forEach(anime => {
-          const animeElement = document.createElement('div');
-          animeElement.innerHTML = `
-            <p>${anime.title}</p>
-            <p>${anime.airing_start}</p>
-          `;
-          animeListContainer.appendChild(animeElement);
+          const animeDate = new Date(anime.start);
+          const dayOfWeek = daysOfWeek[animeDate.getUTCDay()];
+
+          if (!animeByDay[dayOfWeek]) {
+            animeByDay[dayOfWeek] = [];
+          }
+
+          animeByDay[dayOfWeek].push(anime);
+        });
+
+        Object.keys(animeByDay).forEach(dayOfWeek => {
+          const animeForDay = animeByDay[dayOfWeek];
+
+          const dayHeader = document.createElement('div');
+          dayHeader.classList.add('day-of-week');
+          dayHeader.innerHTML = dayOfWeek;
+          animeListContainer.appendChild(dayHeader);
+
+          animeForDay.forEach(anime => {
+            const animeElement = document.createElement('div');
+            animeElement.innerHTML = `
+              <p>${anime.title}</p>
+              <p>${anime.start}</p>
+            `;
+            animeListContainer.appendChild(animeElement);
+          });
         });
       });
   </script>
