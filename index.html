@@ -19,9 +19,10 @@
   <body>
     <table id="item">
       <tr>
-        <th>放送日</th>
         <th>アニメ名</th>
+        <th>話数</th>
         <th>放送時間</th>
+        <th>放送局</th>
       </tr>
     </table>
 
@@ -37,12 +38,14 @@
           
           animeList.forEach(anime => {
             const row = table.insertRow();
-            const dateCell = row.insertCell();
-            dateCell.innerHTML = anime.ondate;
             const nameCell = row.insertCell();
             nameCell.innerHTML = anime.title;
+            const nextCell = row.insertCell();
+            nextCell.innerHTML = anime.next();
             const timeCell = row.insertCell();
-            timeCell.innerHTML = anime.ontime;
+            timeCell.innerHTML = anime.time;
+            const stationCell = row.insertCell();
+            stationCell.innerHTML = anime.station
           });
         });
     </script>
