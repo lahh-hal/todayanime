@@ -1,48 +1,50 @@
+<!DOCTYPE html>
 <html>
   <head>
     <style>
-      .day-header {
-        font-weight: bold;
-        margin: 10px 0 5px 0;
+      table {
+        width: 100%;
+        border-collapse: collapse;
       }
-      .anime-element {
-        margin: 10px 0;
+      th, td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: left;
+      }
+      th {
+        background-color: #f2f2f2;
       }
     </style>
   </head>
   <body>
-    <div id="anime-list-container"></div>
+    <table id="schedule">
+      <tr>
+        <th>放送日</th>
+        <th>アニメ名</th>
+        <th>放送時間</th>
+      </tr>
+    </table>
+
     <script>
-      var animeListContainer = document.getElementById("anime-list-container");
-      var xhr = new XMLHttpRequest();
-      xhr.open("GET", "http://animemap.net/api/table/tokyo.json");
-      xhr.onreadystatechange = function () {
-        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-          var animeData = JSON.parse(xhr.responseText);
-          var animeByDay = {};
-          animeData.forEach(function (anime) {
-            var day = anime.start.substring(0, 3);
-            if (!animeByDay[day]) {
-              animeByDay[day] = [];
-            }
-            animeByDay[day].push(anime);
+      const apiUrl = 'http://animemap.net/api/table/tokyo.json';
+      const table = document.getElementById('schedule');
+
+      fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+          const todaysDate = new Date().toLocaleDateString();
+          const animeList = data.filter(anime => anime.ondate === todaysDate);
+          
+          animeList.forEach(anime => {
+            const row = table.insertRow();
+            const dateCell = row.insertCell();
+            dateCell.innerHTML = anime.ondate;
+            const nameCell = row.insertCell();
+            nameCell.innerHTML = anime.title;
+            const timeCell = row.insertCell();
+            timeCell.innerHTML = anime.ontime;
           });
-          Object.keys(animeByDay).forEach(function (day) {
-            var dayHeader = document.createElement("div");
-            dayHeader.className = "day-header";
-            dayHeader.textContent = day;
-            animeListContainer.appendChild(dayHeader);
-            animeByDay[day].forEach(function (anime) {
-              var animeElement = document.createElement("div");
-              animeElement.className = "anime-element";
-              animeElement.textContent = anime.title + " - " + anime.start + " to " + anime.end;
-              animeListContainer.appendChild(animeElement);
-            });
-          });
-        }
-      };
-      xhr.send();
+        });
     </script>
   </body>
 </html>
- 
